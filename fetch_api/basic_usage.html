@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+    <h1>Check console for output</h1>
+</body>
+<script>
+//   fetch('https://api.thedogapi.com/v1/breeds', {
+//       method: 'GET',
+//     })
+//     .then(response => response.json())
+//     .then(data => console.log(data))
+//     .catch((error) => console.log('Error:', error));
+
+    /*
+        ALTERNATIVELY => can do this as well since a GET request is the default
+        method when none is specified.
+    */
+    fetch('https://api.thedogapi.com/v1/breeds')
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch((error) => console.log('Error:', error));
+
+
+</script>
+</html>
+
