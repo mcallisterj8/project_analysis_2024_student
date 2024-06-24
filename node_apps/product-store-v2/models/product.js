@@ -11,6 +11,19 @@ const { DataTypes } = require("sequelize");
  */
 const sequelize = require("../database");
 
+/**
+ * Note that Sequelize will automatically create a field
+ * called 'id' which will be an auto-incremented primary key
+ * for the entity. This is the default behavior. You can, however,
+ * specify it explicitly by adding this to the model if you wish:
+  
+   id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+   },
+
+ */
 const Product = sequelize.define("Product", {
    name: {
     type: DataTypes.STRING,
