@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Post</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 p-6">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 p-4">
+      <ul class="flex justify-center space-x-4">
+        <li>
+          <a href="/index.html" class="text-white hover:text-blue-200">Home</a>
+        </li>
+        <li>
+          <a href="/create-user.html" class="text-white hover:text-blue-200"
+            >Create User</a
+          >
+        </li>
+        <li>
+          <a href="/create-post.html" class="text-white hover:text-blue-200"
+            >Create Post</a
+          >
+        </li>
+      </ul>
+    </nav>
+    <div class="container mx-auto mt-10">
+      <h1 class="text-2xl font-bold mb-6">Create Post</h1>
+      <form id="post-form" class="bg-white p-4 rounded shadow" onsubmit="handleFormSubmission()">
+        <div class="mb-4">
+          <label class="block text-gray-700" for="title">Title</label>
+          <input
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            type="text"
+            id="title"
+            required
+          />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700" for="content">Content</label>
+          <textarea
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            id="content"
+            required
+          ></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700" for="userId">User</label>
+          <select
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+            id="userId"
+            required
+          ></select>
+        </div>
+        <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit">
+          Create Post
+        </button>
+      </form>
+    </div>
+    <script>
+      const createPostForm = document.getElementById("post-form");
+      document.addEventListener("DOMContentLoaded", async () => {        
+        const users = await fetchUsers();
+        populateUserDropdown(users);
+      });
+
+      async function handleFormSubmission() {
+        event.preventDefault();
+        const title = document.getElementById("title").value;
+        const content = document.getElementById("content").value;
+        const userId = document.getElementById("userId").value;
+        await createPost(title, content, userId);
+        
+        alert("Post created successfully!");
+
+        createPostForm.reset();
+      }
+
+      async function fetchUsers() {
+        const response = await fetch("/users");
+        return await response.json();
+      }
+
+      function populateUserDropdown(users) {
+        const userDropdown = document.getElementById("userId");
+        users.forEach((user) => {
+          const option = document.createElement("option");
+          option.value = user.id;
+          option.textContent = user.name;
+          userDropdown.appendChild(option);
+        });
+      }
+
+      async function createPost(title, content, userId) {
+        await fetch("/posts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ title, content, userId }),
+        });
+      }
+    </script>
+  </body>
+</html>

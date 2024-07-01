@@ -5,16 +5,15 @@ const { DataTypes } = require("sequelize");
  */
 const sequelize = require("../database");
 
-// Define the model
 const Post = sequelize.define("Post", {
-    title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    content: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  content: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
 });
 
 module.exports = Post;
