@@ -63,8 +63,7 @@
 
       async function initProductList() {
         try {
-          const products = await fetchProducts();
-          console.log("here");
+          const products = await fetchProducts();          
 
           populateTable(products);
         } catch (error) {
