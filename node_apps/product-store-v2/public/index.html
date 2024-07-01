@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>My Web Page</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 p-4">
+      <ul class="flex justify-center space-x-4">
+        <li><a href="/" class="text-white hover:text-blue-200">Home</a></li>
+        <li>
+          <a href="/product-list.html" class="text-white hover:text-blue-200"
+            >All Products</a
+          >
+        </li>
+        <li>
+          <a href="/products/1" class="text-white hover:text-blue-200"
+            >Product ID 1</a
+          >
+        </li>
+        <li>
+          <a
+            href="/products/search?name=Yamaha Piano"
+            class="text-white hover:text-blue-200"
+            >Search Piano</a
+          >
+        </li>
+        <li>
+          <a href="/add-product.html" class="text-white hover:text-blue-200"
+            >Add Product</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+      <h1 class="text-center text-2xl font-bold mb-4">
+        Welcome to the Product Store
+      </h1>
+    </div>
+  </body>
+</html>

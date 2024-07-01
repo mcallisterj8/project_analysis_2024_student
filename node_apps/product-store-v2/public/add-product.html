@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Add Product</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 p-4">
+      <ul class="flex justify-center space-x-4">
+        <li><a href="/" class="text-white hover:text-blue-200">Home</a></li>
+        <li>
+          <a href="/product-list.html" class="text-white hover:text-blue-200"
+            >All Products</a
+          >
+        </li>
+        <li>
+          <a href="/products/1" class="text-white hover:text-blue-200"
+            >Product ID 1</a
+          >
+        </li>
+        <li>
+          <a
+            href="/products/search?name=Yamaha Piano"
+            class="text-white hover:text-blue-200"
+            >Search Piano</a
+          >
+        </li>
+        <li>
+          <a href="/add-product.html" class="text-white hover:text-blue-200"
+            >Add Product</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+      <h1 class="text-2xl font-bold mb-6 text-center">Add Product</h1>
+
+      <!-- Form -->
+      <form
+        id="addProductForm"
+        class="space-y-4"
+        onsubmit="handleProductFormSubmission(event)"
+      >
+        <div>
+          <label for="name" class="block text-lg font-medium text-gray-700"
+            >Name:</label
+          >
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          />
+        </div>
+
+        <div>
+          <label for="price" class="block text-lg font-medium text-gray-700"
+            >Price:</label
+          >
+          <input
+            type="number"
+            id="price"
+            name="price"
+            required
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          />
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Add Product
+          </button>
+        </div>
+      </form>
+
+      <!-- Feedback Message -->
+      <div id="feedbackMessage" class="mt-4 hidden"></div>
+    </div>
+
+    <script>
+      async function handleProductFormSubmission(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        await handleProductSubmission(data, form);
+      }
+
+      async function handleProductSubmission(data, form) {
+        const feedbackMessage = document.getElementById("feedbackMessage");
+
+        try {
+          const result = await addProduct(data);
+          displayFeedback(result, feedbackMessage);
+          if (result.success) {
+            form.reset(); // Reset the form fields
+          }
+        } catch (error) {
+          displayErrorFeedback(feedbackMessage);
+        }
+
+        hideFeedbackAfterDelay(feedbackMessage, 3000);
+      }
+
+      async function addProduct(data) {
+        const response = await fetch("/products", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+      }
+
+      function displayFeedback(result, feedbackMessage) {
+        feedbackMessage.textContent = result.message;
+        feedbackMessage.classList.remove("hidden");
+        if (result.success) {
+          feedbackMessage.classList.add(
+            "bg-green-100",
+            "text-green-700",
+            "border",
+            "border-green-200",
+            "p-4",
+            "rounded"
+          );
+        } else {
+          feedbackMessage.textContent = "Error: Unable to add product.";
+          feedbackMessage.classList.add(
+            "bg-red-100",
+            "text-red-700",
+            "border",
+            "border-red-200",
+            "p-4",
+            "rounded"
+          );
+        }
+      }
+
+      function displayErrorFeedback(feedbackMessage) {
+        feedbackMessage.textContent = "Network error: Unable to add product.";
+        feedbackMessage.classList.remove("hidden");
+        feedbackMessage.classList.add(
+          "bg-red-100",
+          "text-red-700",
+          "border",
+          "border-red-200",
+          "p-4",
+          "rounded"
+        );
+      }
+
+      function hideFeedbackAfterDelay(feedbackMessage, delay) {
+        setTimeout(() => {
+          feedbackMessage.classList.add("hidden");
+        }, delay);
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Product List</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-600 p-4">
+      <ul class="flex justify-center space-x-4">
+        <li><a href="/" class="text-white hover:text-blue-200">Home</a></li>
+        <li>
+          <a href="/product-list.html" class="text-white hover:text-blue-200"
+            >All Products</a
+          >
+        </li>
+        <li>
+          <a href="/products/1" class="text-white hover:text-blue-200"
+            >Product ID 1</a
+          >
+        </li>
+        <li>
+          <a
+            href="/products/search?name=Yamaha Piano"
+            class="text-white hover:text-blue-200"
+            >Search Piano</a
+          >
+        </li>
+        <li>
+          <a href="/add-product.html" class="text-white hover:text-blue-200"
+            >Add Product</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+      <h1 class="text-2xl font-bold mb-6 text-center">Product List</h1>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr class="bg-blue-500 text-white">
+              <th class="py-3 px-4 border-b border-gray-200">ID</th>
+              <th class="py-3 px-4 border-b border-gray-200">Name</th>
+              <th class="py-3 px-4 border-b border-gray-200">Price</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody" class="text-gray-700"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        initProductList();
+      });
+
+      async function initProductList() {
+        try {
+          const products = await fetchProducts();
+          console.log("here");
+
+          populateTable(products);
+        } catch (error) {
+          console.error("Error initializing product list:", error);
+        }
+      }
+
+      async function fetchProducts() {
+        try {
+          const response = await fetch("/products");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return await response.json();
+        } catch (error) {
+          console.error("Error fetching products:", error);
+          throw error; // Rethrow to be handled by the caller
+        }
+      }
+
+      function populateTable(products) {
+        const tableBody = document.getElementById("productTableBody");
+        products.forEach((product) => {
+          const row = createProductRow(product);
+          tableBody.appendChild(row);
+        });
+      }
+
+      function createProductRow(product) {
+        const row = document.createElement("tr");
+        row.classList.add("hover:bg-gray-100");
+        row.innerHTML = `
+          <td class="text-center py-2 px-4 border-b border-gray-200">${product.id}</td>
+          <td class="text-center py-2 px-4 border-b border-gray-200">${product.name}</td>
+          <td class="text-center py-2 px-4 border-b border-gray-200">$${product.price}</td>
+        `;
+        return row;
+      }
+    </script>
+  </body>
+</html>
